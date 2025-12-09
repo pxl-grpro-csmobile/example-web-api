@@ -101,7 +101,7 @@ namespace ExampleWebApi.Api.Controllers
         public ActionResult<ActorDTO> Post([FromBody] NewActorModel actorModel)
         {
             Actor newActor = _mapper.Map<Actor>(actorModel);
-
+            newActor.ShortBio = "";
             int newActorId = _repository.AddActor(newActor);
 
             return CreatedAtAction(nameof(GetById), new { id = newActorId }, _mapper.Map<ActorDTO>(newActor));
