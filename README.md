@@ -1,6 +1,6 @@
 # Example Web API
 Example including:
-- Three layered .NET Core 8 Web Application
+- Three layered .NET 10 Web Application
 - JWT Bearer tokens
 - Authentication and Authorisation using Identity
 - Example setup of controller
