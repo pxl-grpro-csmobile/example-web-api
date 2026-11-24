@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.Reflection;
 using System.Text;
 using ExampleWebApi.Infrastructure;
@@ -68,20 +68,10 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Copy 'Bearer ' + valid token into field. You can retrieve a bearer token via '/api/authentication/token'"
     });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-            {
-                {
-                    new OpenApiSecurityScheme
-                    {
-                        Reference = new OpenApiReference
-                        {
-                            Type = ReferenceType.SecurityScheme,
-                            Id = "Bearer"
-                        }
-                    },
-                    new string[] {}
-                }
-            });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = []
+    });
 });
 
 IConfiguration configuration = builder.Configuration;
@@ -132,7 +122,7 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
     .AddEntityFrameworkStores<ExampleDbContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(cfg => { }, AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<ITokenFactory>(new JwtTokenFactory(tokenSettings));
 
 var app = builder.Build();
